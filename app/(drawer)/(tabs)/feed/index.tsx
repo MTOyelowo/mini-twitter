@@ -3,8 +3,10 @@ import Tweet from "../../../../components/Tweet";
 import tweets from "../../../../assets/data/tweets";
 import { Entypo } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import { useKeepAwake } from "expo-keep-awake";
 
 export default function TabOneScreen() {
+  useKeepAwake();
   return (
     <View style={styles.page}>
       <FlatList
