@@ -1,18 +1,44 @@
-import { StyleSheet, View, FlatList, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import Tweet from "../../../../components/Tweet";
-import tweets from "../../../../assets/data/tweets";
+//import tweets from "../../../../assets/data/tweets";
 import { Entypo } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { useKeepAwake } from "expo-keep-awake";
+import { useEffect, useState } from "react";
+import { listTweets } from "../../../../lib/api/tweets";
+import { useQuery } from "@tanstack/react-query";
 
-export default function TabOneScreen() {
-  useKeepAwake();
+export default function FeedScreen() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["tweets"],
+    queryFn: listTweets,
+  });
+
+  // const [tweets, setTweets] = useState([]);
+
+  // useEffect(() => {
+  //   const fetchTweets = async () => {
+  //     const res = await listTweets();
+  //     setTweets(res);
+  //   };
+  //   fetchTweets();
+  // }, []);
+
+  if (isLoading) {
+    return <ActivityIndicator style={{ flex: 1 }} />;
+  }
+  if (error) {
+    return <Text>{error.message}</Text>;
+  }
+
   return (
     <View style={styles.page}>
-      <FlatList
-        data={tweets}
-        renderItem={({ item }) => <Tweet tweet={item} />}
-      />
+      <FlatList data={data} renderItem={({ item }) => <Tweet tweet={item} />} />
       <Link href="/new-tweet" asChild>
         <Entypo
           name="plus"
