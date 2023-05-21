@@ -1,14 +1,33 @@
-import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Pressable,
+  Alert,
+} from "react-native";
 import React, { useState } from "react";
 import { useSearchParams } from "expo-router";
+import { authenticate } from "../../lib/api/auth";
+import { useRouter } from "expo-router";
 
 const Authenticate = () => {
   const [code, setCode] = useState("");
+  const router = useRouter();
 
   const { email } = useSearchParams();
 
   const onConfirm = async () => {
-    console.warn("Authenticate: ", email, code);
+    if (typeof email !== "string") {
+      return;
+    }
+    try {
+      const res = await authenticate({ email, emailToken: code });
+      router.push("/feed");
+      console.log(res);
+    } catch (error) {
+      Alert.alert("Error", "Email code doesn't match");
+    }
   };
 
   return (
