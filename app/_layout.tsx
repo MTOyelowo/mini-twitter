@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { useKeepAwake } from "expo-keep-awake";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import AuthContextProvider from "../context/AuthContext";
 
 const client = new QueryClient();
 
@@ -49,28 +50,30 @@ function RootLayoutNav() {
 
   return (
     <>
-      <QueryClientProvider client={client}>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack screenOptions={{ headerTitleAlign: "center" }}>
-            <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-            <Stack.Screen
-              name="new-tweet"
-              options={{ title: "New Tweet", headerShown: false }}
-            />
-            <Stack.Screen
-              name="(auth)/signIn"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="(auth)/authenticate"
-              options={{ title: "Confirm Email" }}
-            />
-          </Stack>
-        </ThemeProvider>
-      </QueryClientProvider>
+      <AuthContextProvider>
+        <QueryClientProvider client={client}>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack screenOptions={{ headerTitleAlign: "center" }}>
+              <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+              <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+              <Stack.Screen
+                name="new-tweet"
+                options={{ title: "New Tweet", headerShown: false }}
+              />
+              <Stack.Screen
+                name="(auth)/signIn"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="(auth)/authenticate"
+                options={{ title: "Confirm Email" }}
+              />
+            </Stack>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </AuthContextProvider>
     </>
   );
 }

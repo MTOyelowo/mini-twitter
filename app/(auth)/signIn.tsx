@@ -11,15 +11,16 @@ import { useRouter } from "expo-router";
 import { login } from "../../lib/api/auth";
 
 const SignIn = () => {
-  const router = useRouter();
   const [email, setEmail] = useState("");
+
+  const router = useRouter();
 
   const onSignIn = async () => {
     console.warn("Sign in: ", email);
     try {
       await login({ email });
       router.push({ pathname: "/authenticate", params: { email } });
-    } catch (error) {
+    } catch (error: any) {
       Alert.alert("Error", error.message);
     }
   };

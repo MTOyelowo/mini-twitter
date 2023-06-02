@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import { useSearchParams } from "expo-router";
 import { authenticate } from "../../lib/api/auth";
 import { useRouter } from "expo-router";
+import { useAuth } from "../../context/AuthContext";
 
 const Authenticate = () => {
   const [code, setCode] = useState("");
@@ -17,14 +18,15 @@ const Authenticate = () => {
 
   const { email } = useSearchParams();
 
+  const { setAuthToken } = useAuth();
+
   const onConfirm = async () => {
     if (typeof email !== "string") {
       return;
     }
     try {
       const res = await authenticate({ email, emailToken: code });
-      router.push("/feed");
-      console.log(res);
+      setAuthToken(res.authToken);
     } catch (error) {
       Alert.alert("Error", "Email code doesn't match");
     }

@@ -33,7 +33,7 @@ export default function FeedScreen() {
     return <ActivityIndicator style={{ flex: 1 }} />;
   }
   if (error) {
-    return <Text>{error.message}</Text>;
+    //return <Text>{error.message}</Text>;
   }
 
   return (
